@@ -1,4 +1,4 @@
-package resource_test
+package v1_test
 
 import (
 	"context"
@@ -25,7 +25,7 @@ var _ = Describe("Resource Check", func() {
 
 		checkScriptProcess *gardenfakes.FakeProcess
 
-		checkResult []atc.Version
+		checkResult atc.Spaces
 		checkErr    error
 	)
 
@@ -43,7 +43,7 @@ var _ = Describe("Resource Check", func() {
 			return checkScriptExitStatus, nil
 		}
 
-		checkResult = nil
+		checkResult = atc.Spaces{}
 		checkErr = nil
 	})
 
@@ -86,10 +86,23 @@ var _ = Describe("Resource Check", func() {
 		It("returns the raw parsed contents", func() {
 			Expect(checkErr).NotTo(HaveOccurred())
 
-			Expect(checkResult).To(Equal([]atc.Version{
-				atc.Version{"ver": "abc"},
-				atc.Version{"ver": "def"},
-				atc.Version{"ver": "ghi"},
+			Expect(checkResult).To(Equal(atc.Spaces{
+				DefaultSpace: "v1space",
+				AllSpaces:    []atc.Space{"v1space"},
+				Versions: []atc.SpaceVersion{
+					atc.SpaceVersion{
+						Space:   "v1space",
+						Version: atc.Version{"ver": "abc"},
+					},
+					atc.SpaceVersion{
+						Space:   "v1space",
+						Version: atc.Version{"ver": "def"},
+					},
+					atc.SpaceVersion{
+						Space:   "v1space",
+						Version: atc.Version{"ver": "ghi"},
+					},
+				},
 			}))
 
 		})
